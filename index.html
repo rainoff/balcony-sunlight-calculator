@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>把一年的陽光，放進陽台裡。 | A year of sunlight, inside your balcony.</title>
+<style>
+:root{
+  --bg:#F5F5EF; --ink:#263E36; --sun:#E3AC30; --leaf:#39775D; --rule:#B9C4BC;
+  --muted:#5E736B; --pale:#E9EDE6; --card:#FCFCF8; --bad:#B4322A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);overflow-x:clip}
+body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Helvetica Neue",Arial,sans-serif;
+  font-variant-numeric:tabular-nums;line-height:1.45;font-size:15px}
+a{color:var(--leaf)}
+button,input,select{font:inherit;color:inherit}
+.masthead{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+  border-bottom:1px solid var(--rule);font-size:13px;color:var(--muted)}
+.masthead .brand{font-weight:600;letter-spacing:.04em}
+.langs button{background:none;border:1px solid var(--rule);border-radius:999px;padding:1px 10px;margin-left:4px;cursor:pointer;font-size:12px}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.page{padding:8px 16px 32px;display:grid;grid-template-columns:3fr minmax(280px,1fr);gap:28px;align-items:start}
+h1{font-size:30px;line-height:1.2;margin:4px 0 2px;font-weight:600}
+.sub{margin:0 0 8px;color:var(--muted);font-size:14px}
+.left{min-width:0}
+#objectWrap{display:block;outline:none;border-radius:6px}
+#objectWrap:focus-visible{box-shadow:0 0 0 3px rgba(57,119,93,.45)}
+#scene{display:block;width:100%;height:auto;aspect-ratio:2/1;overflow:visible}
+#scene text{font-family:inherit;fill:var(--ink)}
+.month{font-size:12px;fill:var(--muted)}
+.axis{font-size:11px;fill:var(--muted)}
+.glass{fill:none;stroke:var(--rule);stroke-width:1}
+.bar{fill:var(--sun);opacity:.85}
+.nobld{fill:none;stroke:var(--ink);stroke-width:1.2;stroke-dasharray:4 3;opacity:.7}
+.thr{stroke:var(--leaf);stroke-width:1.2;stroke-dasharray:2 3}
+#gHandle{cursor:grab}
+#gHandle.dragging{cursor:grabbing}
+#gHandle rect{fill:var(--card);stroke:var(--ink);stroke-width:1.2}
+#gHandle text{font-size:12px;font-weight:600}
+.datePlane{fill:var(--sun);opacity:.16;pointer-events:none}
+.dateLine{stroke:var(--ink);stroke-width:1;opacity:.55;pointer-events:none}
+.cell{stroke:var(--bg);stroke-width:1;cursor:pointer}
+.okdot{fill:none;stroke:var(--leaf);stroke-width:1.2;opacity:.75;pointer-events:none}
+.potHalo{fill:rgba(255,255,255,.55);stroke:none}
+.potHit{fill:transparent;cursor:grab}
+.potDot{fill:var(--sun);stroke:var(--ink);stroke-width:2.5;pointer-events:none}
+.potCore{fill:var(--ink);pointer-events:none}
+.floorLabel{font-size:11px;fill:var(--muted)}
+.dateControls{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.dateControls label{font-size:13px;color:var(--muted)}
+#dateRange{flex:1 1 220px;min-width:160px;accent-color:var(--sun)}
+.shortcuts button{border:1px solid var(--rule);background:var(--card);border-radius:6px;padding:3px 9px;cursor:pointer;margin-right:4px;font-size:13px}
+.shortcuts button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#dateOut{font-size:13px;font-weight:600}
+details{border-top:1px solid var(--rule);padding:8px 0}
+details summary{cursor:pointer;font-weight:600;font-size:14px}
+details .body{padding:8px 0 4px;font-size:14px}
+.tableWrap{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;font-size:13px;min-width:420px}
+th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--pale);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+td.fail{color:var(--bad);font-weight:600}
+td.pass{color:var(--leaf)}
+.advGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px 12px}
+.advGrid label{display:flex;flex-direction:column;font-size:12px;color:var(--muted)}
+.advGrid input[type=number]{padding:3px 6px;border:1px solid var(--rule);border-radius:4px;background:var(--card);width:100%}
+.switches{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:8px;font-size:13px}
+.side{position:sticky;top:12px;align-self:start;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;
+  display:flex;flex-direction:column;gap:10px;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:14px;min-width:0}
+.side>*{flex-shrink:0}
+.side label.block{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+#plantSelect{padding:6px 8px;border:1px solid var(--rule);border-radius:6px;background:#fff;font-size:15px;color:var(--ink)}
+#verdict{font-weight:600;font-size:19px;line-height:1.3;padding:10px 12px;border-radius:8px;background:var(--pale);margin-top:2px}
+#verdict.ok{background:#DDEBE2}
+#verdict.no{background:#F3E4C9}
+#verdict.off{background:#E8E8E4;color:var(--muted)}
+#hoursLine{font-size:15px}
+#moveBest{min-height:44px;border:1px solid var(--leaf);background:var(--leaf);color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:15px}
+#moveBest:focus-visible{outline:3px solid rgba(57,119,93,.5);outline-offset:2px}
+#moveBest[disabled]{background:var(--pale);color:var(--muted);border-color:var(--rule);cursor:default}
+#moveNote{font-size:13px;color:var(--muted);margin:-4px 0 0}
+.caveat{font-size:12px;color:var(--muted);border-left:3px solid var(--sun);padding-left:8px;margin:0}
+.hint{font-size:12px;color:var(--muted)}
+/* condition summary buttons */
+.conds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.cond{min-height:48px;border:1px solid var(--rule);background:var(--bg);border-radius:8px;padding:6px 6px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:1px;min-width:0}
+.cond .k{font-size:11px;color:var(--muted);letter-spacing:.02em}
+.cond .v{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cond[aria-expanded="true"]{background:#fff;border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--leaf)}
+.cond:focus-visible{outline:3px solid rgba(57,119,93,.5);outline-offset:1px}
+.cond[hidden]{display:none}
+/* inline editor */
+#conditionEditor{border:1px solid var(--ink);border-radius:8px;padding:10px 10px 12px;background:#fff;position:relative}
+#conditionEditor[hidden]{display:none}
+.edHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.edHead .t{font-size:13px;font-weight:600}
+.closeEd{min-width:44px;min-height:44px;margin:-10px -8px -8px 0;border:0;background:none;cursor:pointer;font-size:20px;line-height:1;color:var(--muted);border-radius:8px}
+.closeEd:focus-visible,.openEv:focus-visible,#closeEvidence:focus-visible{outline:3px solid rgba(57,119,93,.5)}
+.edPane[hidden]{display:none}
+.compassWrap{display:flex;gap:12px;align-items:center}
+.compass{display:grid;grid-template-columns:repeat(3,44px);grid-auto-rows:44px;gap:2px}
+.compass label{position:relative;display:block}
+.compass input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.compass span{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--rule);border-radius:6px;font-size:12px;font-weight:600;background:var(--bg)}
+.compass input:checked+span{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+.compass input:focus-visible+span{outline:3px solid rgba(57,119,93,.5)}
+.compassArrow{display:flex;align-items:center;justify-content:center;width:44px;height:44px}
+.compassArrow svg{width:36px;height:36px;transition:transform .2s}
+@media (prefers-reduced-motion:reduce){.compassArrow svg{transition:none}}
+.floorsGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.floorsGrid label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.floorsGrid input[type=number]{min-height:40px;padding:4px 8px;border:1px solid var(--rule);border-radius:6px;font-size:15px;width:100%}
+.switch{display:flex;align-items:center;gap:8px;min-height:44px;font-size:14px;cursor:pointer}
+.switch input{width:20px;height:20px;accent-color:var(--leaf)}
+.gapOpts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gapOpts label{position:relative;display:block;min-width:0}
+.gapOpts input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.gapOpts input+span{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;padding:4px 2px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);text-align:center;line-height:1.25}
+.gapOpts .n{font-size:13px;font-weight:600;white-space:nowrap}
+.gapOpts .e{font-size:11px;color:var(--muted);white-space:nowrap}
+.gapOpts input:checked+span{background:var(--leaf);border-color:var(--leaf)}
+.gapOpts input:checked+span .n,.gapOpts input:checked+span .e{color:#fff}
+.gapOpts input:focus-visible+span{outline:3px solid rgba(57,119,93,.5)}
+.miniHelp{border:0;padding:4px 0 0}
+.miniHelp summary{font-weight:400;font-size:12px}
+.relLine{font-size:13px;margin:6px 0 0}
+.relLine.manual{color:#8A5A1E}
+/* photo + evidence */
+#photoBox{position:relative;width:100%;aspect-ratio:2/3;background:var(--pale);border-radius:8px;overflow:hidden;border:1px solid var(--rule)}
+#plantPhoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+#photoFallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:12px;font-size:14px;color:var(--muted);background:var(--pale)}
+#photoBox[data-state="ok"] #photoFallback{display:none}
+#photoBox[data-state="fallback"] #plantPhoto,#photoBox[data-state="error"] #plantPhoto{visibility:hidden}
+.openEv{min-height:44px;border:1px solid var(--rule);background:var(--card);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:14px;color:var(--ink)}
+dialog#evidenceDialog{border:0;border-radius:12px;padding:0;width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);max-height:min(calc(100vh - 24px),calc(100dvh - 24px));background:var(--card);color:var(--ink);overflow:hidden}
+dialog#evidenceDialog::backdrop{background:rgba(38,62,54,.45)}
+.evInner{display:flex;flex-direction:column;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px)}
+.evHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 10px 10px 16px;border-bottom:1px solid var(--rule);flex-shrink:0}
+.evHead h2{margin:0;font-size:17px}
+#closeEvidence{min-width:44px;min-height:44px;border:1px solid var(--rule);background:var(--bg);border-radius:8px;cursor:pointer;font-size:14px;padding:0 12px}
+.evidence-body{overflow-y:auto;overscroll-behavior:contain;padding:12px 16px 16px;font-size:14px;flex:1 1 auto;min-height:0}
+.evidence-body h3{font-size:14px;margin:12px 0 6px;color:var(--muted)}
+.evidence-body dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0}
+.evidence-body dt{color:var(--muted)}
+.evidence-body dd{margin:0;overflow-wrap:anywhere}
+.evidence-body a{overflow-wrap:anywhere}
+html.modalOpen,html.modalOpen body{overflow:hidden}
+/* best-cell preview */
+#gBestPreview{pointer-events:none}
+.previewRing{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4}
+.previewRing2{fill:rgba(255,255,255,.35);stroke:none}
+@media (max-width:900px){
+  .page{grid-template-columns:1fr;gap:20px}
+  .side{position:static;max-height:none;overflow:visible;margin-top:16px}
+  dialog#evidenceDialog{width:calc(100vw - 16px)}
+  .handleText{display:none}
+  .vh.dateOutWrap{position:static!important;width:auto;height:auto;clip:auto;overflow:visible;white-space:normal}
+  #dateOut{font-size:13px}
+  h1{font-size:26px}
+  #dateRange{flex:1 1 60%}
+  .shortcuts{flex:1 1 100%;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .shortcuts button{min-height:44px;margin:0;white-space:normal;font-size:14px}
+  input[type=number]{font-size:16px;min-height:44px}
+  #ownFloor,#acrossFloors,.advGrid input[type=number]{font-size:16px;min-height:44px}
+}
+/* Open condition editor as a bounded non-modal sheet/panel on mobile (class set by script only while open) */
+#conditionEditor.floating{position:fixed;z-index:30;display:flex;flex-direction:column;background:#fff;border:1px solid var(--ink);
+  box-shadow:0 -6px 24px rgba(38,62,54,.28);padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+#conditionEditor.floating[hidden]{display:none!important}
+#conditionEditor.floating .edHead{flex-shrink:0}
+#conditionEditor.floating .edPane{overflow-y:auto;min-height:0;flex:1 1 auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+body[data-layout="portrait"] #conditionEditor.floating{left:0;right:0;bottom:var(--kb,0px);border-radius:12px 12px 0 0;border-bottom:0;
+  max-height:42vh;max-height:calc(var(--vvh,100dvh) * 0.42)}
+body[data-layout="portrait"].editorOpen{padding-bottom:calc(42vh + 24px);padding-bottom:calc(var(--vvh,100dvh) * 0.42 + 24px)}
+body[data-layout="landscape"] #conditionEditor.floating{top:0;right:0;bottom:0;width:min(42vw,360px);border-radius:12px 0 0 12px;border-right:0;
+  box-shadow:-6px 0 24px rgba(38,62,54,.28);padding-right:calc(12px + env(safe-area-inset-right,0px))}
+body[data-layout="landscape"] #conditionEditor.floating .gapOpts{grid-template-columns:1fr}
+body[data-layout="landscape"] #conditionEditor.floating .gapOpts input+span{min-height:44px;flex-direction:row;gap:8px}
+body[data-layout="landscape"] #conditionEditor.floating .compassWrap{flex-wrap:wrap}
+body[data-layout="landscape"].editorOpen .page{padding-right:calc(min(42vw,360px) + 12px)}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <span class="brand" data-i18n="brand">陽台日照計算器</span>
+  <span class="langs" role="group" aria-label="Language / 語言">
+    <button type="button" id="langZh" aria-pressed="true" lang="zh-Hant">中文</button>
+    <button type="button" id="langEn" aria-pressed="false" lang="en">English</button>
+  </span>
+</header>
+<main class="page">
+  <section class="left">
+    <h1 data-i18n="title">把一年的陽光，放進陽台裡。</h1>
+    <p class="sub" data-i18n="subtitle">往前看一整年的陽光，往下看選定日期的地板熱度，拖一盆去比一比。</p>
+
+    <div id="objectWrap" tabindex="0" role="application" aria-describedby="wrapHelp">
+      <svg id="scene" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" aria-labelledby="sceneTitle">
+        <title id="sceneTitle" data-i18n="sceneTitle">陽台日照水族箱：後方為全年直射時數，下方為當日地板分布</title>
+        <defs>
+          <clipPath id="chartClip"><rect x="72" y="36" width="860" height="250"/></clipPath>
+          <linearGradient id="heatGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgb(233,237,230)"/><stop offset="1" stop-color="rgb(227,172,48)"/></linearGradient>
+        </defs>
+        <g id="gGlass">
+          <polygon class="glass" points="72,36 932,36 932,320 992,470 12,470 72,320"/>
+          <line class="glass" x1="72" y1="320" x2="932" y2="320"/>
+          <line class="glass" x1="72" y1="286" x2="932" y2="286"/>
+        </g>
+        <g id="gChart">
+          <g id="gAxis"></g>
+          <g id="gBars" clip-path="url(#chartClip)"></g>
+          <path id="noBldPath" class="nobld" clip-path="url(#chartClip)" d=""/>
+          <line id="thrLine" class="thr" x1="72" x2="932" y1="0" y2="0" visibility="hidden"/>
+          <rect id="chartHit" x="72" y="36" width="860" height="250" fill="transparent" style="cursor:col-resize"/>
+        </g>
+        <g id="gSeason"></g>
+        <g id="gMonths"></g>
+        <g id="gFloor"></g>
+        <g id="gFloorLabels"></g>
+        <polygon id="datePlane" class="datePlane" points=""/>
+        <line id="dateLine" class="dateLine"/>
+        <g id="gBestPreview" style="display:none">
+          <circle id="previewRing2" class="previewRing2" r="17"/>
+          <circle id="previewRing" class="previewRing" r="17"/>
+        </g>
+        <g id="gPot">
+          <circle id="potHalo" class="potHalo" r="20"/>
+          <circle id="potDot" class="potDot" r="14"/>
+          <circle id="potCore" class="potCore" r="4"/>
+          <circle id="potHit" class="potHit" r="28"/>
+        </g>
+        <g id="gHandle">
+          <rect id="handleRect" x="0" y="6" width="84" height="24" rx="6"/>
+          <polygon id="handleTip" points="0,0 0,0 0,0" fill="#263E36"/>
+          <text id="handleText" class="handleText" x="0" y="22" text-anchor="middle">9/20</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="dateControls">
+      <label for="dateRange" data-i18n="dateLabel">日期</label>
+      <input type="range" id="dateRange" min="0" max="364" step="1" value="262">
+      <span class="vh dateOutWrap"><output id="dateOut" for="dateRange">2026-09-20</output></span>
+      <span class="shortcuts" role="group" aria-label="Season shortcuts">
+        <button type="button" data-day="78">3/20</button>
+        <button type="button" data-day="171">6/21</button>
+        <button type="button" data-day="262">9/20</button>
+        <button type="button" data-day="355">12/22</button>
+      </span>
+    </div>
+    <p id="wrapHelp" class="hint" style="margin:6px 0 0" data-i18n="wrapHelp">點或拖地板任一格移動花盆；方向鍵以格為單位移動（上＝靠欄杆）。拖動上方日期把手改變日期。</p>
+
+    <details id="advanced">
+      <summary id="advSummary" data-i18n="advSummary">進階：以公尺直接設定幾何</summary>
+      <div class="body">
+        <p class="hint" data-i18n="advHint">直接輸入的數值會保留，直到你再使用右側的一般條件為止。</p>
+        <div class="advGrid">
+          <label>W <span data-i18n="lblW">陽台寬（m）</span><input type="number" id="adv-W" step="0.1" min="0.5" max="30"></label>
+          <label>D <span data-i18n="lblD">陽台深（m）</span><input type="number" id="adv-D" step="0.1" min="0.3" max="10"></label>
+          <label>Ho <span data-i18n="lblHo">雨遮高（m）</span><input type="number" id="adv-Ho" step="0.1" min="0.5" max="10"></label>
+          <label>Hr <span data-i18n="lblHr">女兒牆高（m）</span><input type="number" id="adv-Hr" step="0.05" min="0" max="5"></label>
+          <label>L <span data-i18n="lblL">對面建築距離（m）</span><input type="number" id="adv-L" step="0.5" min="0.5" max="500"></label>
+          <label>Hb <span data-i18n="lblHb">對面屋頂相對高（m）</span><input type="number" id="adv-Hb" step="0.5" min="-100" max="1000"></label>
+          <label>phi <span data-i18n="lblPhi">立面朝向（°）</span><input type="number" id="adv-phi" step="1" min="0" max="359"></label>
+          <label>px <span data-i18n="lblPx">花盆 x（m）</span><input type="number" id="adv-px" step="0.1" min="0"></label>
+          <label>py <span data-i18n="lblPy">花盆 y（m）</span><input type="number" id="adv-py" step="0.1" min="0"></label>
+          <label>pz <span data-i18n="lblPz">花盆高 z（m）</span><input type="number" id="adv-pz" step="0.1" min="0" max="5"></label>
+        </div>
+        <div class="switches">
+          <label><input type="checkbox" id="adv-awning"> <span data-i18n="swAwning">雨遮</span></label>
+          <label><input type="checkbox" id="adv-parapet"> <span data-i18n="swParapet">女兒牆</span></label>
+          <label><input type="checkbox" id="adv-building"> <span data-i18n="swBuilding">對面建築</span></label>
+          <span class="hint" data-i18n="sideNote">兩側牆永遠封閉，無開關。</span>
+        </div>
+      </div>
+    </details>
+    <details id="modelNotes">
+      <summary data-i18n="modelSummary">模型說明</summary>
+      <div class="body" id="modelBody"></div>
+    </details>
+    <details id="dataNotes">
+      <summary data-i18n="dataSummary">植物資料與來源</summary>
+      <div class="body tableWrap" id="dataBody"></div>
+    </details>
+    <details id="selfCheck">
+      <summary id="selfSummary" data-i18n="selfSummary">內建自檢</summary>
+      <div class="body tableWrap"><table id="selfTable"></table></div>
+    </details>
+  </section>
+
+  <aside class="side" id="plantPanel" aria-label="Plant and balcony conditions">
+    <label class="block" for="plantSelect"><span data-i18n="plantLabel">植物</span></label>
+    <select id="plantSelect" aria-describedby="caveat"></select>
+
+    <div class="conds" role="group" id="condGroup">
+      <button type="button" class="cond" id="conditionFacing" aria-expanded="false" aria-controls="conditionEditor"><span class="k" data-i18n="condFacing">朝向</span><span class="v" id="condFacingV"></span></button>
+      <button type="button" class="cond" id="conditionFloors" aria-expanded="false" aria-controls="conditionEditor"><span class="k" data-i18n="condFloors">樓層</span><span class="v" id="condFloorsV"></span></button>
+      <button type="button" class="cond" id="conditionGap" aria-expanded="false" aria-controls="conditionEditor"><span class="k" data-i18n="condGap">間隔</span><span class="v" id="condGapV"></span></button>
+    </div>
+    <div id="conditionEditor" hidden>
+      <div class="edHead"><span class="t" id="edTitle"></span><button type="button" class="closeEd" id="closeEditor" aria-label="關閉">×</button></div>
+      <div class="edPane" id="editorFacing" hidden>
+        <div class="compassWrap">
+          <div class="compass" role="radiogroup" id="facingRadios" aria-labelledby="edTitle"></div>
+          <p class="hint" style="margin:0" data-i18n="facingHint">站在陽台往外看，讀手機指南針顯示的「面向角度」（heading）。</p>
+        </div>
+        <details class="miniHelp"><summary class="hint" data-i18n="facingMore">怎麼讀角度？</summary><p class="hint" data-i18n="facingMoreBody">打開手機指南針 App，人站在陽台朝外站直，畫面上方顯示的度數就是陽台的面向；不要用北針的方向來猜。</p></details>
+      </div>
+      <div class="edPane" id="editorFloors" hidden>
+        <label class="switch"><input type="checkbox" id="hasBuilding"><span data-i18n="hasBuilding">對面有建築</span></label>
+        <div class="floorsGrid">
+          <label><span data-i18n="ownFloor">你在幾樓</span><input type="number" id="ownFloor" min="1" max="30" step="1" inputmode="numeric"></label>
+          <label id="acrossWrap"><span data-i18n="acrossFloors">對面幾層</span><input type="number" id="acrossFloors" min="1" max="30" step="1" inputmode="numeric"></label>
+        </div>
+        <p class="relLine" id="relLine"></p>
+        <p class="hint" style="margin:6px 0 0" data-i18n="floorsHint">對面較矮也會遮到低角度的陽光；只有對面完全沒有建築時才關掉。</p>
+      </div>
+      <div class="edPane" id="editorGap" hidden>
+        <div class="gapOpts" role="radiogroup" id="gapRadios" aria-labelledby="edTitle"></div>
+        <p class="hint" id="gapManual" style="margin:6px 0 0"></p>
+      </div>
+    </div>
+
+    <div id="verdict" aria-live="polite"></div>
+    <div id="hoursLine"></div>
+    <button type="button" id="moveBest"></button>
+    <p id="moveNote"></p>
+    <p class="caveat" id="caveat" data-i18n="caveat">達到參考日照不代表一定種得成；水分、溫度、通風與土壤同樣重要。</p>
+
+    <div id="photoBox" data-state="loading">
+      <img id="plantPhoto" alt="" decoding="async" referrerpolicy="no-referrer">
+      <div id="photoFallback" aria-hidden="true"><strong id="fallbackName"></strong><span id="fallbackNote"></span></div>
+    </div>
+    <button type="button" class="openEv" id="openEvidence" data-i18n="openEvidence">資料與來源</button>
+  </aside>
+  <div id="sideHome" hidden></div>
+</main>
+<dialog id="evidenceDialog" aria-labelledby="evidenceTitle">
+  <div class="evInner">
+    <div class="evHead"><h2 id="evidenceTitle" data-i18n="evTitle">資料與來源</h2><button type="button" id="closeEvidence" data-i18n="close">關閉</button></div>
+    <div class="evidence-body" id="evidenceBody" tabindex="0">
+      <h3 data-i18n="evBasis">判定依據</h3>
+      <dl id="facts"></dl>
+      <div id="evidenceModel"></div>
+      <h3 data-i18n="evPhoto">照片來源</h3>
+      <dl id="photoFacts"></dl>
+    </div>
+  </div>
+</dialog>
+<script>
+/* ============================================================
+   Balcony sunlight calculator — round 1 core
+   Plain script; top-level names are verification hooks.
+   ============================================================ */
+'use strict';
+
+// ---------- Site constants ----------
+const LAT = 25.04, LON = 121.51, TZ = 8, YEAR = 2026;
+const GRID = 12;
+const STEPS = 288;                 // 5-minute samples per day
+const STEP_H = 5 / 60;             // hours per sample
+const MONTH_START = [0,31,59,90,120,151,181,212,243,273,304,334]; // zero-based day of Jan1..Dec1 (2026, not leap)
+const MONTH_LEN = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+// ---------- Degree/radian conversion in ONE place ----------
+const DEG = Math.PI / 180;
+const rad = d => d * DEG;
+const deg = r => r / DEG;
+
+// ---------- Layout constants (design numbers) ----------
+const LY = {
+  chartX0: 72, chartX1: 932, chartY0: 36, chartY1: 286, hMax: 14,
+  handleY: 18, monthY: 301, seasonY0: 308, seasonY1: 318,
+  farY: 320, farX0: 72, farX1: 932, nearY: 470, nearX0: 12, nearX1: 992
+};
+
+// ---------- Plant reference data ----------
+// months: 1-based calendar months in the reference season. min: hours/day or null (unknown).
+const PLANTS = [
+  {id:'tomato',   zh:'番茄',   en:'tomato',       cls:'fullsun', min:6,    months:[8,9,10,11,12,1,2,3],
+   seasonZh:'8 月至 3 月（播種期，花蓮農改場平地資料）', seasonEn:'August to March (sowing period; Hualien agricultural research station, lowland data)',
+   src:'https://www.hdares.gov.tw/upload/hdares/files/web_structure/865/news4(4)_11-14.pdf'},
+  {id:'cucumber', zh:'小黃瓜', en:'cucumber',     cls:'fullsun', min:6,    months:[2,3,4,8,9,10],
+   seasonZh:'2 至 4 月、8 至 10 月（台北市田園城市平台市民分享）', seasonEn:'February to April, August to October (a citizen\'s post on Taipei City\'s Farm City platform)',
+   src:'https://farmcity.taipei/city/m6_story/story_C.php?sid=197'},
+  {id:'chili',    zh:'辣椒',   en:'chili',        cls:'fullsun', min:6,    months:[1,2,3,4,5,6,7,8,9,10,11,12],
+   seasonZh:'全年（來源：全年可播，春秋較佳）', seasonEn:'all year (source: can be sown all year, spring and autumn preferred)',
+   src:'https://kmweb.moa.gov.tw/knowledge_view.php?id=6491'},
+  {id:'basil',    zh:'九層塔', en:'Thai basil',   cls:'fullsun', min:6,    months:[5,6,7,8,9,10],
+   seasonZh:'5 至 10 月（播種期）', seasonEn:'May to October (sowing period)',
+   src:'https://kmweb.moa.gov.tw/knowledge_view.php?id=9098'},
+  {id:'lettuce',  zh:'葉萵苣', en:'leaf lettuce', cls:'fullsun', min:6,    months:[1,2,3,4,5,6,7,8,9,10,11,12],
+   seasonZh:'全年', seasonEn:'all year',
+   src:'https://kmweb.moa.gov.tw/subject/subject.php?id=8568'},
+  {id:'mint',     zh:'薄荷',   en:'mint',         cls:'partsun', min:3,    months:[1,2,3,4,5,6,7,8,9,10,11,12],
+   seasonZh:'全年（論壇回覆：四季生長旺盛）', seasonEn:'all year (forum reply: grows vigorously in all four seasons)',
+   src:'https://kmweb.moa.gov.tw/knowledge_view.php?id=6743'},
+  {id:'bokchoy',  zh:'青江菜', en:'bok choy',     cls:'shade',   min:null, months:[1,2,3,4,5,6,7,8,9,10,11,12],
+   seasonZh:'全年（論壇回覆：除嚴冬外全年可種）', seasonEn:'all year (forum reply: can be grown all year except deep winter)',
+   src:'https://kmweb.moa.gov.tw/knowledge_view.php?id=2374'},
+  {id:'coriander',zh:'香菜',   en:'coriander',    cls:'shade',   min:null, months:[12,1,2],
+   seasonZh:'12 月至 2 月（來源只寫「冬季」，本工具換算為月份）', seasonEn:'December to February (the source says only "winter"; this tool converted it to months)',
+   src:'https://kmweb.moa.gov.tw/knowledge_view.php?id=2243'},
+  {id:'amaranth', zh:'紅莧菜', en:'red amaranth', cls:'shade',   min:null, months:[4,5,6,7,8,9,10],
+   seasonZh:'4 至 10 月（北部播種期）', seasonEn:'April to October (northern Taiwan sowing period)',
+   src:'https://kmweb.moa.gov.tw/knowledge_view.php?id=5113'}
+];
+const PLANT_BY_ID = Object.fromEntries(PLANTS.map(p => [p.id, p]));
+// URL-only photo records (Wikimedia Commons). Only the selected plant's image is requested when viewed.
+// Set NO_REMOTE = true (or open with ?NO_REMOTE) to never request images and show the same-size fallback instead.
+const NO_REMOTE = (typeof location !== 'undefined' && /NO_REMOTE/.test(location.search + location.hash));
+const PHOTOS = {
+  mint:{title:'Mint plant in water.jpg', source:'https://commons.wikimedia.org/wiki/File:Mint_plant_in_water.jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Mint_plant_in_water.jpg/330px-Mint_plant_in_water.jpg',
+    author:'Netha Hussain', license:'CC BY-SA 4.0', license_url:'https://creativecommons.org/licenses/by-sa/4.0',
+    altZh:'薄荷植株，莖插在水中', altEn:'Mint plant with its stems standing in water'},
+  tomato:{title:'Tomato Plant (Alabama Extension).jpg', source:'https://commons.wikimedia.org/wiki/File:Tomato_Plant_(Alabama_Extension).jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Tomato_Plant_%28Alabama_Extension%29.jpg/330px-Tomato_Plant_%28Alabama_Extension%29.jpg',
+    author:'Alabama Extension', license:'CC0', license_url:'http://creativecommons.org/publicdomain/zero/1.0/deed.en',
+    altZh:'番茄植株，結著綠色的果實', altEn:'Tomato plant with green fruit'},
+  basil:{title:'Thai basil with flowers.jpg', source:'https://commons.wikimedia.org/wiki/File:Thai_basil_with_flowers.jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ce/Thai_basil_with_flowers.jpg/330px-Thai_basil_with_flowers.jpg',
+    author:'user:Risacher', license:'CC BY-SA 3.0', license_url:'http://creativecommons.org/licenses/by-sa/3.0/',
+    altZh:'開著花的九層塔', altEn:'Thai basil plant with flowers'},
+  cucumber:{title:'Cucumber hanging on the vine.JPG', source:'https://commons.wikimedia.org/wiki/File:Cucumber_hanging_on_the_vine.JPG',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Cucumber_hanging_on_the_vine.JPG/330px-Cucumber_hanging_on_the_vine.JPG',
+    author:'V5hnuvp; brightness edit: Hohum (Commons file history)', license:'CC BY-SA 4.0', license_url:'https://creativecommons.org/licenses/by-sa/4.0',
+    altZh:'藤上垂掛的小黃瓜', altEn:'Cucumber hanging on the vine'},
+  chili:{title:'Chilli Plant (4240694581).jpg', source:'https://commons.wikimedia.org/wiki/File:Chilli_Plant_(4240694581).jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Chilli_Plant_%284240694581%29.jpg/330px-Chilli_Plant_%284240694581%29.jpg',
+    author:'Alex Proimos from Sydney, Australia', license:'CC BY 2.0', license_url:'https://creativecommons.org/licenses/by/2.0',
+    altZh:'結著辣椒的辣椒植株', altEn:'Chili plant with fruit'},
+  lettuce:{title:'Leaf lettuce plant in a pot 09.jpg', source:'https://commons.wikimedia.org/wiki/File:Leaf_lettuce_plant_in_a_pot_09.jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Leaf_lettuce_plant_in_a_pot_09.jpg/330px-Leaf_lettuce_plant_in_a_pot_09.jpg',
+    author:'Netha Hussain', license:'CC BY-SA 4.0', license_url:'https://creativecommons.org/licenses/by-sa/4.0',
+    altZh:'盆栽的葉萵苣', altEn:'Leaf lettuce plant growing in a pot'},
+  bokchoy:{title:'Bok Choy.JPG', source:'https://commons.wikimedia.org/wiki/File:Bok_Choy.JPG',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Bok_Choy.JPG/330px-Bok_Choy.JPG',
+    author:'JS and new VpuipV', license:'CC BY-SA 3.0', license_url:'https://creativecommons.org/licenses/by-sa/3.0',
+    altZh:'青江菜', altEn:'Bok choy'},
+  coriander:{title:'Coriander plant in a pot 14.jpg', source:'https://commons.wikimedia.org/wiki/File:Coriander_plant_in_a_pot_14.jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Coriander_plant_in_a_pot_14.jpg/330px-Coriander_plant_in_a_pot_14.jpg',
+    author:'Netha Hussain', license:'CC BY-SA 4.0', license_url:'https://creativecommons.org/licenses/by-sa/4.0',
+    altZh:'盆栽的香菜', altEn:'Coriander plant growing in a pot'},
+  amaranth:{title:'SZ 深圳 Shenzhen 福田 Futian 沙咀村 ShaZuiCun Village shop 超市 Supermarket vegetable 紅莧菜 May 2025 R12S 01.jpg',
+    source:'https://commons.wikimedia.org/wiki/File:SZ_%E6%B7%B1%E5%9C%B3_Shenzhen_%E7%A6%8F%E7%94%B0_Futian_%E6%B2%99%E5%92%80%E6%9D%91_ShaZuiCun_Village_shop_%E8%B6%85%E5%B8%82_Supermarket_vegetable_%E7%B4%85%E8%8E%A7%E8%8F%9C_May_2025_R12S_01.jpg',
+    image_url:'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/SZ_%E6%B7%B1%E5%9C%B3_Shenzhen_%E7%A6%8F%E7%94%B0_Futian_%E6%B2%99%E5%92%80%E6%9D%91_ShaZuiCun_Village_shop_%E8%B6%85%E5%B8%82_Supermarket_vegetable_%E7%B4%85%E8%8E%A7%E8%8F%9C_May_2025_R12S_01.jpg/330px-SZ_%E6%B7%B1%E5%9C%B3_Shenzhen_%E7%A6%8F%E7%94%B0_Futian_%E6%B2%99%E5%92%80%E6%9D%91_ShaZuiCun_Village_shop_%E8%B6%85%E5%B8%82_Supermarket_vegetable_%E7%B4%85%E8%8E%A7%E8%8F%9C_May_2025_R12S_01.jpg',
+    author:'Haudsum Tucakm', license:'CC0', license_url:'http://creativecommons.org/publicdomain/zero/1.0/deed.en',
+    altZh:'超市裡採收後的紅莧菜葉，不是盆栽植株', altEn:'Harvested red amaranth leaves at a supermarket, not a growing potted plant'}
+};
+
+const FACINGS = [['N',0],['NE',45],['E',90],['SE',135],['S',180],['SW',225],['W',270],['NW',315]];
+const GAPS = {alley:8, road:15, courtyard:25};
+
+// ---------- ONE state ----------
+const state = {
+  day: 262,
+  pot: {x:1.5, y:1, z:0.6},
+  plant: 'mint',
+  geom: {W:3, D:1.5, Ho:2.8, Hr:1.1, L:8, Hb:12, phi:180, awning:true, parapet:true, building:true},
+  everyday: {own:2, across:6, gap:'alley', facing:180, building:true},
+  lang: 'zh',
+  ui: {editor:null, preview:false, photoPlant:null, photoState:'loading'}
+};
+// ---------- Derived results ----------
+const derived = { yearPot:new Array(365).fill(0), yearNoBld:new Array(365).fill(0), floor:new Array(GRID*GRID).fill(0),
+  sunrise:null, sunset:null };
+
+// ---------- Calendar helpers ----------
+function monthOfDay(d){ let m = 11; while (m > 0 && MONTH_START[m] > d) m--; return m + 1; } // 1..12
+function dayToMD(d){ const m = monthOfDay(d); return {m, d: d - MONTH_START[m-1] + 1}; }
+function fmtISO(d){ const md = dayToMD(d); return YEAR + '-' + String(md.m).padStart(2,'0') + '-' + String(md.d).padStart(2,'0'); }
+function fmtShort(d){ const md = dayToMD(d); return md.m + '/' + md.d; }
+function fmtHM(min){ min = Math.round(min); const h = Math.floor(min/60), m = min - h*60; return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0'); }
+function inSeason(plant, d){ return plant.months.includes(monthOfDay(d)); }
+function seasonLength(plant){ return plant.months.reduce((s,m) => s + MONTH_LEN[m-1], 0); }
+
+// ---------- Sun position (NOAA General Solar Position Calculations, NOAA Global Monitoring Division) ----------
+// dayIndex: zero-based day of year; clockHour: local clock time (fixed UTC+8) in decimal hours.
+function sunPosition(dayIndex, clockHour){
+  // 1. Fractional year (radians); the sample's own fractional hour enters here.
+  const g = 2 * Math.PI / 365 * (dayIndex + (clockHour - 12) / 24);
+  // 2. Equation of time (minutes), NOAA Fourier series.
+  const eqtime = 229.18 * (0.000075 + 0.001868*Math.cos(g) - 0.032077*Math.sin(g)
+                 - 0.014615*Math.cos(2*g) - 0.040849*Math.sin(2*g));
+  // 3. Solar declination (radians), NOAA Fourier series.
+  const decl = 0.006918 - 0.399912*Math.cos(g) + 0.070257*Math.sin(g) - 0.006758*Math.cos(2*g)
+             + 0.000907*Math.sin(2*g) - 0.002697*Math.cos(3*g) + 0.00148*Math.sin(3*g);
+  // 4. True solar time (minutes) = clock minutes + eqtime + 4*longitude - 60*timezone.
+  const tst = clockHour * 60 + eqtime + 4 * LON - 60 * TZ;
+  // 5. Hour angle (degrees): tst/4 - 180.
+  const ha = rad(tst / 4 - 180);
+  // 6. Elevation from the zenith cosine; azimuth via atan2(east, north) so quadrants are resolved.
+  const lat = rad(LAT);
+  const sinEl = Math.sin(lat)*Math.sin(decl) + Math.cos(lat)*Math.cos(decl)*Math.cos(ha);
+  const el = deg(Math.asin(Math.max(-1, Math.min(1, sinEl))));
+  const east  = -Math.cos(decl) * Math.sin(ha);
+  const north =  Math.sin(decl)*Math.cos(lat) - Math.cos(decl)*Math.sin(lat)*Math.cos(ha);
+  let az = deg(Math.atan2(east, north)); if (az < 0) az += 360;
+  return {el, az, eqtime, decl};
+}
+
+// Cache: 365 x 288 midpoint positions (el, az) — computed once.
+const SUN = (() => {
+  const el = new Float64Array(365 * STEPS), az = new Float64Array(365 * STEPS);
+  for (let d = 0; d < 365; d++) for (let k = 0; k < STEPS; k++) {
+    const p = sunPosition(d, (k + 0.5) * STEP_H);
+    el[d*STEPS + k] = p.el; az[d*STEPS + k] = p.az;
+  }
+  return {el, az};
+})();
+
+// Sunrise / sunset: elevation crossing -0.833° by bisection to 1-minute precision (display + self-check only).
+function elevationAt(dayIndex, minutes){ return sunPosition(dayIndex, minutes / 60).el; }
+function bisectCrossing(dayIndex, a, b, rising){
+  const f = m => elevationAt(dayIndex, m) + 0.833;
+  let fa = f(a), fb = f(b);
+  if (rising ? !(fa < 0 && fb > 0) : !(fa > 0 && fb < 0)) return null;
+  while (b - a > 1) { const m = (a + b) / 2, fm = f(m);
+    if ((fm > 0) === rising) b = m; else a = m; }
+  return (a + b) / 2;
+}
+function sunriseSunset(dayIndex){
+  return { rise: bisectCrossing(dayIndex, 0, 720, true), set: bisectCrossing(dayIndex, 720, 1440, false) };
+}
+// Solar noon: clock minutes when true solar time = 720; iterate because eqtime depends on the fractional hour.
+function solarNoon(dayIndex){
+  let m = 720;
+  for (let i = 0; i < 4; i++) { const p = sunPosition(dayIndex, m / 60); m = 720 - (p.eqtime + 4*LON - 60*TZ); }
+  return m;
+}
+
+// ---------- ONE lighting test, shared everywhere ----------
+// point (x,y,z), sun elevation alphaDeg, azimuth difference thetaDeg = A - phi, geometry g. Returns true when lit.
+function isLit(x, y, z, alphaDeg, thetaDeg, g){
+  if (alphaDeg <= 0) return false;
+  const th = rad(thetaDeg), cosT = Math.cos(th);
+  if (cosT <= 0) return false;                                   // sun behind the façade
+  const xFront = x + y * Math.tan(th);
+  if (xFront < 0 || xFront > g.W) return false;                  // side walls, always closed
+  const tanA = Math.tan(rad(alphaDeg));
+  const h = z + (y / cosT) * tanA;                               // ray height at the railing plane
+  if (g.parapet && h <= g.Hr) return false;
+  if (g.awning && h >= g.Ho) return false;
+  if (g.building) { const h2 = z + ((y + g.L) / cosT) * tanA; if (h2 <= g.Hb) return false; }
+  return true;
+}
+
+// ---------- Time integration ----------
+// Daily hours at a point = count of lit 5-minute midpoint samples / 12.
+function dayHours(dayIndex, x, y, z, g){
+  let n = 0; const base = dayIndex * STEPS;
+  for (let k = 0; k < STEPS; k++) {
+    const el = SUN.el[base + k]; if (el <= 0) continue;
+    if (isLit(x, y, z, el, SUN.az[base + k] - g.phi, g)) n++;
+  }
+  return n / 12;
+}
+function yearHours(x, y, z, g){ const out = new Array(365); for (let d = 0; d < 365; d++) out[d] = dayHours(d, x, y, z, g); return out; }
+function cellCentre(i, j){ return { x: (i + 0.5) * state.geom.W / GRID, y: (j + 0.5) * state.geom.D / GRID }; }
+function floorHours(dayIndex, z, g){
+  const out = new Array(GRID * GRID);
+  for (let j = 0; j < GRID; j++) for (let i = 0; i < GRID; i++) {
+    out[j*GRID + i] = dayHours(dayIndex, (i + 0.5) * g.W / GRID, (j + 0.5) * g.D / GRID, z, g);
+  }
+  return out;
+}
+// Recompute everything that depends on geometry or pot; old arrays are replaced, never accumulated.
+function recomputeYear(){
+  const g = state.geom, p = state.pot;
+  derived.yearPot = yearHours(p.x, p.y, p.z, g);
+  derived.yearNoBld = yearHours(p.x, p.y, p.z, Object.assign({}, g, {building:false}));
+}
+function recomputeFloor(){ derived.floor = floorHours(state.day, state.pot.z, state.geom); }
+function recomputeDay(){ const rs = sunriseSunset(state.day); derived.sunrise = rs.rise; derived.sunset = rs.set; }
+
+// ---------- Plant judgement ----------
+function plantMin(p){ return p.cls === 'fullsun' ? 6 : p.cls === 'partsun' ? 3 : null; }
+function qualifyingDays(plant, year){
+  const min = plantMin(plant); if (min === null) return null;
+  let n = 0; for (let d = 0; d < 365; d++) if (inSeason(plant, d) && year[d] >= min) n++;
+  return n;
+}
+function bestCell(){
+  let bi = 0; for (let k = 1; k < derived.floor.length; k++) if (derived.floor[k] > derived.floor[bi]) bi = k;
+  const bh = derived.floor[bi], cur = derived.yearPot[state.day];
+  return { bi, bh, maxH: Math.max(bh, cur), brighter: bh > cur + 1e-9 };
+}
+</script>
+<script>
+// ============================================================
+//  UI text (both languages)
+// ============================================================
+const T = {
+zh:{
+  brand:'陽台日照計算器', title:'把一年的陽光，放進陽台裡。',
+  subtitle:'往前看一整年的陽光，往下看選定日期的地板熱度，拖一盆去比一比。',
+  sceneTitle:'陽台日照水族箱：後方為全年直射時數，下方為當日地板分布',
+  wrapHelp:'點或拖地板任一格移動花盆；方向鍵以格為單位移動（上＝靠欄杆）。拖動上方日期把手改變日期。',
+  dateLabel:'日期', advSummary:'進階：以公尺直接設定幾何',
+  advHint:'直接輸入的數值會保留，直到你再使用右側的一般條件為止。',
+  lblW:'陽台寬（m）', lblD:'陽台深（m）', lblHo:'雨遮高（m）', lblHr:'女兒牆高（m）', lblL:'對面建築距離（m）',
+  lblHb:'對面屋頂相對高（m）', lblPhi:'立面朝向（°）', lblPx:'花盆 x（m）', lblPy:'花盆 y（m）', lblPz:'花盆高 z（m）',
+  swAwning:'雨遮', swParapet:'女兒牆', swBuilding:'對面建築', sideNote:'兩側牆永遠封閉，無開關。',
+  modelSummary:'模型說明', dataSummary:'植物資料與來源', selfSummary:'內建自檢',
+  plantLabel:'植物',
+  facingNames:{N:'北',NE:'東北',E:'東',SE:'東南',S:'南',SW:'西南',W:'西',NW:'西北'},
+  cls:{fullsun:'全日照（每天 6 小時以上直射）', partsun:'半日照（3 到 6 小時）', shade:'耐陰（3 小時以下）'},
+  noBld:'虛線＝沒有對面建築時', hoursAxis:'小時／日',
+  railing:'欄杆側', wall:'室內側', legendMax:'9+ 小時', legendDots:'綠圈＝當季且達到已知門檻的格子',
+  selfHead:['項目','期望','實際','結果'], pass:'通過', fail:'失敗', selfTitle:(f,n)=> f? `內建自檢：${f}/${n} 項失敗` : `內建自檢：${n} 項全部通過`,
+  dataHead:['植物','類別','參考季節','來源'],
+  dataNote:'季節為參考月份範圍，不保證整個季節都適合這個陽台。門檻數字（全日照 6 小時、半日照 3 小時）是本工具的參考定義，並非全部由來源驗證。耐陰植物的最低直射時數未知，不自動視為成功。',
+  model:[
+    '太陽位置：NOAA 一般太陽位置公式（分年角 γ 含樣本的小時分數、時差、赤緯、時角），固定 UTC+8，台北 25.04N / 121.51E，2026 年。方位角以 atan2(東, 北) 求得。',
+    '時間積分：一天切成 288 個 5 分鐘區段，取每段中點測試；亮的段數 ÷ 12 即為直射小時。',
+    '唯一的照明測試：太陽在立面前方（cos θ > 0）→ 側牆（x + y·tanθ 需落在 0..W）→ 欄杆面射線高度 h 與女兒牆、雨遮比較 → 對面建築面射線高度 h2 與 Hb 比較。年曲線、地板圖、目前狀態都用同一個函式。',
+    '地板：12×12 格中心點，在目前花盆高度 z 取樣，色階固定 0..9+ 小時。虛線是「只關掉對面建築」的比較。',
+    '地板/日期不做任何「每日正規化」；所有值都是實際計算的小時數。日出日落用 −0.833° 二分法，只作顯示與自檢。'
+  ]
+},
+en:{
+  brand:'Balcony sunlight calculator', title:'A year of sunlight, inside your balcony.',
+  subtitle:'Look forward at a year of sun, down at the chosen day\'s floor heat, and drag a pot to compare spots.',
+  sceneTitle:'Balcony sunlight aquarium: yearly direct-sun hours behind, the selected day\'s floor map below',
+  wrapHelp:'Click or drag any floor cell to move the pot; arrow keys move one cell (up = toward the railing). Drag the date handle above to change the day.',
+  dateLabel:'Date', advSummary:'Advanced: set geometry directly in metres',
+  advHint:'Values typed here persist until you use the everyday conditions on the right again.',
+  lblW:'balcony width (m)', lblD:'balcony depth (m)', lblHo:'awning height (m)', lblHr:'parapet height (m)', lblL:'distance to building (m)',
+  lblHb:'roof height across, relative (m)', lblPhi:'façade azimuth (°)', lblPx:'pot x (m)', lblPy:'pot y (m)', lblPz:'pot height z (m)',
+  swAwning:'awning', swParapet:'parapet', swBuilding:'building across', sideNote:'Side walls are always closed; no switch.',
+  modelSummary:'Model notes', dataSummary:'Plant data and sources', selfSummary:'Built-in self-check',
+  plantLabel:'Plant',
+  facingNames:{N:'N',NE:'NE',E:'E',SE:'SE',S:'S',SW:'SW',W:'W',NW:'NW'},
+  cls:{fullsun:'full sun (6+ hours of direct sun a day)', partsun:'part sun (3 to 6 hours)', shade:'shade tolerant (under 3 hours)'},
+  noBld:'dashed = without the building across', hoursAxis:'hours/day',
+  railing:'railing', wall:'indoor', legendMax:'9+ h', legendDots:'green ring = in-season cell meeting the known threshold',
+  selfHead:['Check','Expected','Actual','Result'], pass:'pass', fail:'FAIL', selfTitle:(f,n)=> f? `Built-in self-check: ${f}/${n} failed` : `Built-in self-check: all ${n} passed`,
+  dataHead:['Plant','Class','Reference season','Source'],
+  dataNote:'Seasons are reference month ranges, not a guarantee that the whole season suits this balcony. Threshold numbers (full sun 6 h, part sun 3 h) are this tool\'s reference definitions, not all verified by the sources. Shade-tolerant plants have an unknown minimum and are never counted as automatic successes.',
+  model:[
+    'Sun position: NOAA general solar position equations (fractional year γ including the sample\'s fractional hour, equation of time, declination, hour angle), fixed UTC+8, Taipei 25.04N / 121.51E, year 2026. Azimuth from atan2(east, north).',
+    'Time integration: the day is split into 288 five-minute steps, tested at each midpoint; lit steps ÷ 12 give direct-sun hours.',
+    'One lighting test: sun in front of the façade (cos θ > 0) → side walls (x + y·tanθ must fall in 0..W) → ray height h at the railing plane compared with parapet and awning → ray height h2 at the building across compared with Hb. The year curve, floor map and current state all call this one function.',
+    'Floor: 12×12 cell centres sampled at the current pot height z, fixed 0..9+ hour colour scale. The dashed line is the comparison with ONLY the building across disabled.',
+    'No per-day normalisation anywhere; every value is a computed hour count. Sunrise/sunset use −0.833° by bisection, for display and self-check only.'
+  ]
+}};
+const tt = () => T[state.lang];
+</script>
+<script>
+// ============================================================
+//  Projection (chart scale + perspective floor) — one orientation everywhere
+//  physical y=0 (railing) is FAR at LY.farY; y=D (indoor wall) is NEAR at LY.nearY; x grows screen-right.
+// ============================================================
+function dayToX(d){ return LY.chartX0 + (d + 0.5) * (LY.chartX1 - LY.chartX0) / 365; }
+function xToDay(sx){ return Math.max(0, Math.min(364, Math.floor((sx - LY.chartX0) / (LY.chartX1 - LY.chartX0) * 365))); }
+function hourToY(h){ return LY.chartY1 - Math.min(h, LY.hMax) / LY.hMax * (LY.chartY1 - LY.chartY0); }
+function project(x, y){
+  const t = Math.max(0, Math.min(1, y / state.geom.D));
+  const left = LY.farX0 + (LY.nearX0 - LY.farX0) * t, right = LY.farX1 + (LY.nearX1 - LY.farX1) * t;
+  return { x: left + (x / state.geom.W) * (right - left), y: LY.farY + (LY.nearY - LY.farY) * t };
+}
+function unproject(sx, sy){
+  const t = Math.max(0, Math.min(1, (sy - LY.farY) / (LY.nearY - LY.farY)));
+  const left = LY.farX0 + (LY.nearX0 - LY.farX0) * t, right = LY.farX1 + (LY.nearX1 - LY.farX1) * t;
+  const u = Math.max(0, Math.min(1, (sx - left) / (right - left)));
+  return { x: u * state.geom.W, y: t * state.geom.D };
+}
+function svgPoint(evt){
+  const scene = document.getElementById('scene');
+  const pt = scene.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+  return pt.matrixTransform(scene.getScreenCTM().inverse());
+}
+// Fixed 0..9+ hour colour scale for the floor (same on every date and plant).
+function heatColour(h){
+  const t = Math.max(0, Math.min(1, h / 9));
+  const c0 = [233,237,230], c1 = [227,172,48];            // pale -> sun gold
+  const mix = (a,b) => Math.round(a + (b - a) * t);
+  return `rgb(${mix(c0[0],c1[0])},${mix(c0[1],c1[1])},${mix(c0[2],c1[2])})`;
+}
+const $ = id => document.getElementById(id);
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, text){ const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text !== undefined) e.textContent = text; return e; }
+
+// ============================================================
+//  Rendering
+// ============================================================
+function renderStatic(){
+  const ax = $('gAxis'); ax.textContent = '';
+  for (let h = 0; h <= LY.hMax; h += 2) {
+    const y = hourToY(h);
+    ax.appendChild(el('line', {x1:LY.chartX0, x2:LY.chartX1, y1:y, y2:y, stroke:'#B9C4BC', 'stroke-width':h ? 0.5 : 1, opacity:h ? .5 : 1}));
+    ax.appendChild(el('text', {x:LY.chartX0 - 6, y:y + 4, class:'axis', 'text-anchor':'end'}, String(h)));
+  }
+  ax.appendChild(el('text', {x:LY.chartX0 - 6, y:LY.monthY, class:'axis', 'text-anchor':'end', id:'axisUnit'}, tt().hoursAxis));
+  ax.appendChild(el('text', {x:LY.chartX1 - 6, y:LY.chartY0 + 14, class:'axis', 'text-anchor':'end', id:'noBldLegend'}, tt().noBld));
+  const gm = $('gMonths'); gm.textContent = '';
+  const names = state.lang === 'zh' ? ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                                    : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  for (let m = 0; m < 12; m++) gm.appendChild(el('text', {class:'month', x:dayToX(MONTH_START[m] + MONTH_LEN[m] / 2 - 0.5), y:LY.monthY, 'text-anchor':'middle'}, names[m]));
+  const fl = $('gFloorLabels'); fl.textContent = '';
+  // Orientation labels: railing (far, right of the far edge) and indoor wall (near, bottom-right). Short words keep them inside x<1000.
+  fl.appendChild(el('text', {class:'floorLabel', x:LY.farX1 + 8, y:LY.farY + 4}, tt().railing));
+  fl.appendChild(el('text', {class:'floorLabel', x:LY.nearX1 - 4, y:LY.nearY + 19, 'text-anchor':'end'}, tt().wall));
+  // Fixed 0..9+ hour colour scale (same gradient as heatColour) and the green-ring explanation, bottom-left row; bounds x 12..~530.
+  fl.appendChild(el('text', {class:'floorLabel', x:12, y:LY.nearY + 19}, '0'));
+  fl.appendChild(el('rect', {x:22, y:LY.nearY + 10, width:100, height:10, rx:2, fill:'url(#heatGrad)', stroke:'#B9C4BC', 'stroke-width':0.5}));
+  fl.appendChild(el('text', {class:'floorLabel', x:126, y:LY.nearY + 19}, tt().legendMax));
+  fl.appendChild(el('circle', {class:'okdot', cx:206, cy:LY.nearY + 15, r:4, opacity:1}));
+  fl.appendChild(el('text', {class:'floorLabel', x:214, y:LY.nearY + 19}, tt().legendDots));
+  // floor cells (rects are re-coloured on each floor render)
+  const gf = $('gFloor'); gf.textContent = '';
+  for (let j = 0; j < GRID; j++) for (let i = 0; i < GRID; i++) {
+    const g = state.geom, x0 = i * g.W / GRID, x1 = (i + 1) * g.W / GRID, y0 = j * g.D / GRID, y1 = (j + 1) * g.D / GRID;
+    const a = project(x0, y0), b = project(x1, y0), c = project(x1, y1), d = project(x0, y1);
+    const poly = el('polygon', {class:'cell', points:`${a.x},${a.y} ${b.x},${b.y} ${c.x},${c.y} ${d.x},${d.y}`, 'data-i':i, 'data-j':j});
+    gf.appendChild(poly);
+  }
+  const gd = el('g', {id:'gDots'}); gf.appendChild(gd);
+}
+function renderYear(){
+  const gb = $('gBars'); gb.textContent = '';
+  const w = (LY.chartX1 - LY.chartX0) / 365;
+  for (let d = 0; d < 365; d++) {
+    const h = derived.yearPot[d]; if (h <= 0) continue;
+    gb.appendChild(el('rect', {class:'bar', x:LY.chartX0 + d * w, y:hourToY(h), width:w, height:LY.chartY1 - hourToY(h)}));
+  }
+  $('noBldPath').setAttribute('d', derived.yearNoBld.map((h, d) => (d ? 'L' : 'M') + dayToX(d).toFixed(1) + ' ' + hourToY(h).toFixed(1)).join(''));
+  const plant = PLANT_BY_ID[state.plant], min = plantMin(plant), thr = $('thrLine');
+  if (min === null) thr.setAttribute('visibility', 'hidden');
+  else { thr.setAttribute('visibility', 'visible'); thr.setAttribute('y1', hourToY(min)); thr.setAttribute('y2', hourToY(min)); }
+  const gs = $('gSeason'); gs.textContent = '';
+  for (let d = 0; d < 365; d++) {
+    if (!inSeason(plant, d)) continue;
+    const ok = min !== null && derived.yearPot[d] >= min;
+    gs.appendChild(el('rect', {x:LY.chartX0 + d * w, y:LY.seasonY0, width:w + 0.3, height:LY.seasonY1 - LY.seasonY0, fill: ok ? '#39775D' : '#DDEBE2'}));
+  }
+}
+function renderFloor(){
+  const plant = PLANT_BY_ID[state.plant], min = plantMin(plant), season = inSeason(plant, state.day);
+  const cells = $('gFloor').querySelectorAll('polygon.cell'); const gd = $('gDots'); gd.textContent = '';
+  cells.forEach(c => {
+    const i = +c.dataset.i, j = +c.dataset.j, h = derived.floor[j * GRID + i];
+    c.setAttribute('fill', heatColour(h));
+    c.setAttribute('aria-label', `${i},${j}: ${h.toFixed(1)}h`);
+    if (season && min !== null && h >= min) { const p = cellCentre(i, j), s = project(p.x, p.y); gd.appendChild(el('circle', {class:'okdot', cx:s.x, cy:s.y, r:4})); }
+  });
+}
+function renderPot(){
+  const s = project(state.pot.x, state.pot.y);
+  ['potHalo','potHit','potDot','potCore'].forEach(id => { $(id).setAttribute('cx', s.x); $(id).setAttribute('cy', s.y); });
+}
+function renderDate(){
+  const x = dayToX(state.day), hy = LY.handleY;
+  $('handleRect').setAttribute('x', x - 42); $('handleRect').setAttribute('y', hy - 12);
+  $('handleTip').setAttribute('points', `${x - 5},${hy + 12} ${x + 5},${hy + 12} ${x},${hy + 18}`);
+  $('handleText').setAttribute('x', x); $('handleText').setAttribute('y', hy + 4); $('handleText').textContent = fmtShort(state.day);
+  $('dateLine').setAttribute('x1', x); $('dateLine').setAttribute('x2', x); $('dateLine').setAttribute('y1', hy + 18); $('dateLine').setAttribute('y2', LY.farY);
+  const xn = LY.nearX0 + (x - LY.farX0) / (LY.farX1 - LY.farX0) * (LY.nearX1 - LY.nearX0);
+  $('datePlane').setAttribute('points', `${x - 2},${LY.chartY0} ${x + 2},${LY.chartY0} ${x + 2},${LY.farY} ${xn + 4},${LY.nearY} ${xn - 4},${LY.nearY} ${x - 2},${LY.farY}`);
+  $('dateRange').value = state.day; $('dateOut').value = fmtISO(state.day);
+  $('dateRange').setAttribute('aria-valuetext', fmtISO(state.day));
+  document.querySelectorAll('.shortcuts button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.day === state.day)));
+}
+function renderAll(){ renderText(); renderStatic(); renderYear(); renderFloor(); renderPot(); renderDate(); renderPanel(); renderControls(); renderSelfCheck(); }
+
+// ============================================================
+//  Setters (verification hooks + UI entry points)
+// ============================================================
+function clampPot(){ const g = state.geom, p = state.pot; p.x = Math.max(0, Math.min(g.W, p.x)); p.y = Math.max(0, Math.min(g.D, p.y)); p.z = Math.max(0, p.z); }
+function afterGeom(){ clampPot(); recomputeYear(); recomputeFloor(); renderStatic(); renderYear(); renderFloor(); renderPot(); renderDate(); renderPanel(); renderControls(); }
+function setDay(d){ d = Math.max(0, Math.min(364, Math.round(+d))); if (!isFinite(d)) return; state.day = d; recomputeFloor(); recomputeDay(); renderFloor(); renderDate(); renderPanel(); }
+function setPlant(id){ if (!PLANT_BY_ID[id]) return; state.plant = id; $('plantSelect').value = id; renderYear(); renderFloor(); renderPanel(); updatePhoto(); }
+function setLang(l){ if (l !== 'zh' && l !== 'en') return; state.lang = l; renderAll(); }
+function setGeomField(key, v){
+  if (['awning','parapet','building'].includes(key)) { state.geom[key] = !!v; if (key === 'building') state.everyday.building = !!v; }
+  else { v = +v; if (!isFinite(v) || !(key in state.geom)) return; if (key === 'phi') v = ((v % 360) + 360) % 360; state.geom[key] = v; }
+  afterGeom();
+}
+function setPotField(k, v){ v = +v; if (!isFinite(v) || !('xyz'.includes(k))) return; state.pot[k] = v; clampPot(); recomputeYear(); if (k === 'z') recomputeFloor(); renderFloor(); renderYear(); renderPot(); renderPanel(); renderControls(); }
+function setPotXY(x, y){ state.pot.x = x; state.pot.y = y; clampPot(); recomputeYear(); renderYear(); renderPot(); renderPanel(); renderControls(); }
+function setPotCell(i, j){ i = Math.max(0, Math.min(GRID - 1, Math.round(i))); j = Math.max(0, Math.min(GRID - 1, Math.round(j))); const c = cellCentre(i, j); setPotXY(c.x, c.y); }
+function currentCell(){ const g = state.geom; return { i: Math.max(0, Math.min(GRID - 1, Math.floor(state.pot.x / g.W * GRID))), j: Math.max(0, Math.min(GRID - 1, Math.floor(state.pot.y / g.D * GRID))) }; }
+function moveBest(){ const b = bestCell(); if (!b.brighter) return false; setPotCell(b.bi % GRID, Math.floor(b.bi / GRID)); return true; }
+// Everyday → geometry conversion (Hb = (across − own) × 3, L from gap, phi from facing, building switch)
+function applyEveryday(){
+  const e = state.everyday, g = state.geom;
+  g.Hb = (e.across - e.own) * 3; g.L = GAPS[e.gap]; g.phi = e.facing; g.building = e.building;
+  afterGeom();
+}
+</script>
+<script>
+// ============================================================
+//  Built-in self-check — expected values are fixed literals.
+// ============================================================
+let SELF_RESULTS = [];
+function runSelfCheck(){
+  const R = [];
+  const add = (name, expected, actual, pass) => R.push({name, expected:String(expected), actual:String(actual), pass:!!pass});
+  const within = (a, b, tol) => Math.abs(a - b) <= tol;
+  const hm = s => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+  // Sunrise / sunset, ±5 min
+  const RS = [[171, '2026-06-21', '05:04', '18:48'], [355, '2026-12-22', '06:34', '17:11']];
+  for (const [d, label, r, s] of RS) {
+    const got = sunriseSunset(d);
+    add(`sunrise ${label}`, r, got.rise === null ? 'none' : fmtHM(got.rise), got.rise !== null && within(got.rise, hm(r), 5));
+    add(`sunset ${label}`, s, got.set === null ? 'none' : fmtHM(got.set), got.set !== null && within(got.set, hm(s), 5));
+  }
+  // Solar-noon elevation, ±0.5°
+  for (const [d, label, exp] of [[171, '2026-06-21', 88.4], [355, '2026-12-22', 41.5]]) {
+    const e = elevationAt(d, solarNoon(d)); add(`noon elevation ${label}`, exp + '°', e.toFixed(2) + '°', within(e, exp, 0.5));
+  }
+  // Geometry tests: W=4, y=1, z=0, Hr=0.5, Ho=2, side walls closed, building off unless noted
+  const G = {W:4, D:2, Ho:2, Hr:0.5, L:9, Hb:11.5, phi:0, awning:true, parapet:true, building:false};
+  const lit = v => v ? 'lit' : 'dark';
+  const GT = [
+    ['Parapet', [2,1,0,20,0,G], false], ['Opening', [2,1,0,45,0,G], true], ['Awning', [2,1,0,80,0,G], false],
+    ['Right wall', [3.75,1,0,45,30,G], false], ['Right open', [3.75,1,0,45,-30,G], true],
+    ['Left wall', [0.25,1,0,45,-30,G], false], ['Left open', [0.25,1,0,45,30,G], true],
+    ['Building clears', [2,1,0,45,30,Object.assign({}, G, {building:true, Hb:11.5})], true],
+    ['Building blocks', [2,1,0,45,30,Object.assign({}, G, {building:true, Hb:11.6})], false],
+    ['Railing edge', [2,0,0,45,0,Object.assign({}, G, {parapet:false})], true]
+  ];
+  for (const [n, args, exp] of GT) { const got = isLit(...args); add(n, lit(exp), lit(got), got === exp); }
+  // Scenario: Hb=1000 → 0 h all year at pot; full/part-sun classes 0 qualifying days in season
+  const tall = yearHours(state.pot.x, state.pot.y, state.pot.z, Object.assign({}, state.geom, {building:true, Hb:1000}));
+  const tallMax = Math.max(...tall); add('Hb=1000: pot hours all year', '0 h', tallMax + ' h', tallMax === 0);
+  for (const p of PLANTS) if (p.min !== null) { const q = qualifyingDays(p, tall); add(`Hb=1000: ${p.en} qualifying days`, 0, q, q === 0); }
+  for (const p of PLANTS) if (p.cls === 'shade') add(`${p.en}: threshold unknown`, 'null', String(plantMin(p)), plantMin(p) === null);
+  // North facing, winter solstice → 0 h
+  const north = dayHours(355, state.pot.x, state.pot.y, state.pot.z, Object.assign({}, state.geom, {phi:0}));
+  add('Facing north, 12/22', '0 h', north + ' h', north === 0);
+  // Season lengths
+  const SL = {tomato:243, cucumber:181, chili:365, basil:184, lettuce:365, mint:365, bokchoy:365, coriander:90, amaranth:214};
+  for (const id in SL) add(`season length ${id}`, SL[id], seasonLength(PLANT_BY_ID[id]), seasonLength(PLANT_BY_ID[id]) === SL[id]);
+  // Conversions
+  add('6 floors across, own 2 → Hb', 12, (6 - 2) * 3, (6 - 2) * 3 === 12);
+  add('2 floors across, own 2 → Hb', 0, (2 - 2) * 3, (2 - 2) * 3 === 0);
+  add('alley → L', 8, GAPS.alley, GAPS.alley === 8); add('road → L', 15, GAPS.road, GAPS.road === 15); add('courtyard → L', 25, GAPS.courtyard, GAPS.courtyard === 25);
+  SELF_RESULTS = R; return R;
+}
+function renderSelfCheck(){
+  const t = tt(), R = SELF_RESULTS, fails = R.filter(r => !r.pass).length;
+  const tbl = $('selfTable'); tbl.textContent = '';
+  const hr = document.createElement('tr'); t.selfHead.forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); }); tbl.appendChild(hr);
+  for (const r of R) { const tr = document.createElement('tr');
+    [r.name, r.expected, r.actual, r.pass ? t.pass : t.fail].forEach((v, k) => { const td = document.createElement('td'); td.textContent = v; if (k === 3) td.className = r.pass ? 'pass' : 'fail'; tr.appendChild(td); });
+    tbl.appendChild(tr); }
+  $('selfSummary').textContent = t.selfTitle(fails, R.length); $('selfSummary').style.color = fails ? 'var(--bad)' : '';
+}
+
+// ============================================================
+//  Events
+// ============================================================
+// ---------- Boot ----------
+</script>
+<script>
+// ============================================================
+//  Round 2: sidebar text additions
+// ============================================================
+Object.assign(T.zh, {
+  condFacing:'朝向', condFloors:'樓層', condGap:'間隔', close:'關閉', manual:'手動',
+  edFacing:'陽台面向哪裡', edFloors:'樓層與對面建築', edGap:'和對面的距離',
+  facingHint:'站在陽台往外看，讀手機指南針畫面顯示的「面向角度」（heading）。',
+  facingMore:'怎麼讀角度？', facingMoreBody:'打開手機指南針 App，人站在陽台朝外站直，畫面上方顯示的度數就是陽台的面向；不要用北針指的方向來猜。',
+  hasBuilding:'對面有建築', ownFloor:'你在幾樓', acrossFloors:'對面幾層',
+  floorsHint:'對面較矮也會遮到低角度的陽光；只有對面完全沒有建築時才關掉。',
+  gapNames:{alley:'巷子',road:'馬路',courtyard:'中庭'}, gapEst:{alley:'約8公尺',road:'約15公尺',courtyard:'約25公尺'},
+  floorsV:(e)=>`本棟${e.own}・對面${e.building? e.across : '無'}`,
+  facingManual:(phi)=>`${phi}°（手動）`, gapManualV:(L)=>`${L} m（手動）`,
+  gapManualNote:(L)=>`目前使用進階設定的距離 ${L} 公尺（手動值）。選擇上面任一項會改回預設距離。`,
+  relAuto:(hb,e)=>`對面屋頂比你的陽台地板高約 ${hb} 公尺（(${e.across}−${e.own})×3）。`,
+  relNeg:(hb,e)=>`對面屋頂比你的陽台地板低約 ${-hb} 公尺（(${e.across}−${e.own})×3），仍可能遮到低角度陽光。`,
+  relManual:(hb,auto)=>`目前使用進階手動值：對面屋頂相對高 ${hb} 公尺（樓層換算為 ${auto} 公尺，未套用）。`,
+  relOff:'對面建築已關閉，不計算遮擋。',
+  vOff:(p,sz)=>`今天不在${p.zh}的參考季節（${sz}）`, vUnknown:()=>'直射時數不足以判定', vOk:()=>'這個位置今天達到參考日照', vNo:()=>'這個位置今天直射光不足',
+  hoursKnown:(h,m)=>`今日 ${h.toFixed(1)} 小時 · 參考至少 ${m} 小時`, hoursUnknown:(h)=>`今日 ${h.toFixed(1)} 小時 · 參考門檻未知`,
+  moveBest:'移到較亮處比較', moveNone:'取樣格今天沒有直射光。', moveNoBetter:'取樣格中沒有更亮的位置。',
+  moveCan:(bh)=>`最亮的取樣格今天約 ${bh.toFixed(1)} 小時；移過去只是比較，不代表最適合種植。`,
+  caveat:'達到參考日照不代表一定種得成；水分、溫度、通風與土壤同樣重要。',
+  openEvidence:'資料與來源', evTitle:'資料與來源', evBasis:'判定依據', evPhoto:'照片來源',
+  photoLoading:'照片載入中…', photoError:'照片無法載入', photoOff:'未載入遠端照片',
+  f:{plant:'植物', cls:'類別', date:'日期', riseSet:'日出／日落', pot:'花盆位置', hours:'今日直射', min:'參考最低', season:'參考季節', qual:'季節內達標天數', src:'季節來源',
+     title:'檔名', author:'作者', source:'來源頁', license:'授權', crop:'顯示方式'},
+  unknownMin:'未知（耐陰植物，直射時數不足以判定）', qualUnknown:'未知（門檻未知，不計算）',
+  qualKnown:(q,len)=>`${len} 天中 ${q} 天達到門檻（依目前花盆位置）`,
+  cropNote:'照片放在直式框中，填滿後上下或左右邊緣會被裁掉，不會被拉伸變形。',
+  potFmt:(p,h)=>`x ${p.x.toFixed(2)} m、y ${p.y.toFixed(2)} m、z ${p.z.toFixed(2)} m`,
+  evModel:'簡化模型：只計算直射陽光，用雨遮、女兒牆、兩側牆與一棟平行的對面建築作幾何遮擋，不含反射光、散射光、雲量與季節天氣。門檻（全日照 6 小時、半日照 3 小時）是本工具的參考定義。'
+});
+Object.assign(T.en, {
+  condFacing:'Facing', condFloors:'Floors', condGap:'Gap', close:'Close', manual:'manual',
+  edFacing:'Which way the balcony faces', edFloors:'Floors and the building across', edGap:'Distance to the building across',
+  facingHint:'Stand on the balcony looking out and read the facing HEADING shown on your phone\'s compass.',
+  facingMore:'How do I read the angle?', facingMoreBody:'Open the compass app, stand upright facing out from the balcony, and read the degrees at the top of the screen. Do not guess from where the north needle points.',
+  hasBuilding:'Building across', ownFloor:'Your floor', acrossFloors:'Floors across',
+  floorsHint:'A lower building across can still block low sun; turn this off only if nothing is across.',
+  gapNames:{alley:'Alley',road:'Road',courtyard:'Courtyard'}, gapEst:{alley:'about 8 m',road:'about 15 m',courtyard:'about 25 m'},
+  floorsV:(e)=>`you ${e.own} · across ${e.building? e.across : 'none'}`,
+  facingManual:(phi)=>`${phi}° (manual)`, gapManualV:(L)=>`${L} m (manual)`,
+  gapManualNote:(L)=>`Currently using the advanced distance ${L} m (manual). Choosing an option above returns to a preset.`,
+  relAuto:(hb,e)=>`The roof across is about ${hb} m above your balcony floor ((${e.across}−${e.own})×3).`,
+  relNeg:(hb,e)=>`The roof across is about ${-hb} m below your balcony floor ((${e.across}−${e.own})×3); it can still block low sun.`,
+  relManual:(hb,auto)=>`Using the advanced manual value: roof across ${hb} m relative to your floor (the floor conversion would give ${auto} m, not applied).`,
+  relOff:'Building across is off; no obstruction is calculated.',
+  vOff:(p,se)=>`Today is outside ${p.en}'s reference season (${se})`, vUnknown:()=>'Direct sun alone is insufficient', vOk:()=>'This spot meets the reference sun today', vNo:()=>'Not enough direct sun here today',
+  hoursKnown:(h,m)=>`Today ${h.toFixed(1)} h · reference at least ${m} h`, hoursUnknown:(h)=>`Today ${h.toFixed(1)} h · reference minimum unknown`,
+  moveBest:'Try a brighter spot', moveNone:'No sampled cell gets direct sun today.', moveNoBetter:'No sampled spot is brighter.',
+  moveCan:(bh)=>`The brightest sampled cell gets about ${bh.toFixed(1)} h today; moving there is a comparison, not a best growing position.`,
+  caveat:'Meeting the light reference is not a cultivation guarantee; water, temperature, airflow and soil matter too.',
+  openEvidence:'Data & sources', evTitle:'Data & sources', evBasis:'Assessment basis', evPhoto:'Photo source',
+  photoLoading:'Loading photo…', photoError:'Photo could not be loaded', photoOff:'Remote photo not loaded',
+  f:{plant:'Plant', cls:'Class', date:'Date', riseSet:'Sunrise / sunset', pot:'Pot position', hours:'Direct sun today', min:'Reference minimum', season:'Reference season', qual:'Qualifying days in season', src:'Season source',
+     title:'File', author:'Author', source:'Source page', license:'License', crop:'Display'},
+  unknownMin:'unknown (shade tolerant; direct sun alone is insufficient)', qualUnknown:'unknown (threshold unknown, not counted)',
+  qualKnown:(q,len)=>`${q} of ${len} days reach the threshold (at the current pot position)`,
+  cropNote:'The photo sits in a portrait frame and is filled edge to edge, so its top/bottom or left/right edges may be cropped away. It is never stretched.',
+  potFmt:(p,h)=>`x ${p.x.toFixed(2)} m, y ${p.y.toFixed(2)} m, z ${p.z.toFixed(2)} m`,
+  evModel:'Simplified model: direct sun only, blocked geometrically by the awning, parapet, side walls and one parallel building across. No reflected or diffuse light, cloud cover or seasonal weather. Thresholds (full sun 6 h, part sun 3 h) are this tool\'s reference definitions.'
+});
+
+// ============================================================
+//  Condition summaries + inline editor
+// ============================================================
+function facingPreset(){ const f = FACINGS.find(([, d]) => d === state.geom.phi); return f ? f[0] : null; }
+function gapPreset(){ for (const k in GAPS) if (GAPS[k] === state.geom.L) return k; return null; }
+function autoHb(){ return (state.everyday.across - state.everyday.own) * 3; }
+function renderConds(){
+  const t = tt(), e = state.everyday, g = state.geom;
+  const fp = facingPreset(); $('condFacingV').textContent = fp ? t.facingNames[fp] : t.facingManual(g.phi);
+  $('condFloorsV').textContent = t.floorsV(Object.assign({}, e, {building:g.building}));
+  const gp = gapPreset(); $('condGapV').textContent = gp ? t.gapNames[gp] : t.gapManualV(g.L);
+  $('conditionGap').hidden = !g.building;
+  if (!g.building && state.ui.editor === 'gap') state.ui.editor = null;
+  $('acrossWrap').hidden = !g.building;
+  const rl = $('relLine'); rl.classList.remove('manual');
+  if (!g.building) rl.textContent = t.relOff;
+  else if (g.Hb === autoHb()) rl.textContent = g.Hb >= 0 ? t.relAuto(g.Hb, e) : t.relNeg(g.Hb, e);
+  else { rl.textContent = t.relManual(g.Hb, autoHb()); rl.classList.add('manual'); }
+  $('gapManual').textContent = gp ? '' : t.gapManualNote(g.L);
+  renderEditor();
+}
+function renderEditor(){
+  const ed = state.ui.editor, t = tt(), box = $('conditionEditor');
+  const map = {facing:'conditionFacing', floors:'conditionFloors', gap:'conditionGap'};
+  for (const k in map) $(map[k]).setAttribute('aria-expanded', String(ed === k));
+  box.hidden = !ed;
+  ['facing','floors','gap'].forEach(k => { $('editor' + k[0].toUpperCase() + k.slice(1)).hidden = ed !== k; });
+  if (ed) $('edTitle').textContent = t['ed' + ed[0].toUpperCase() + ed.slice(1)];
+  $('closeEditor').setAttribute('aria-label', t.close);
+  // Mobile: an OPEN editor floats as a bounded non-modal sheet (portrait) or right panel (landscape); desktop stays inline.
+  const floating = !!ed && layoutMode !== 'desktop';
+  box.classList.toggle('floating', floating);
+  document.body.classList.toggle('editorOpen', floating);
+}
+function toggleEditor(k){
+  const opening = state.ui.editor !== k;
+  state.ui.editor = opening ? k : null; renderEditor();
+  if (opening && layoutMode !== 'desktop') revealScene();     // once per explicit open, never on input/render
+}
+function closeEditor(){ const ed = state.ui.editor; state.ui.editor = null; renderEditor();
+  if (ed) $({facing:'conditionFacing', floors:'conditionFloors', gap:'conditionGap'}[ed]).focus({preventScroll: layoutMode === 'desktop'}); }
+
+// ---------- Layout mode (desktop / portrait mobile / landscape mobile) ----------
+// Uses the LAYOUT viewport (innerWidth vs innerHeight) for orientation, so a portrait keyboard does not trigger landscape.
+const mqMobile = window.matchMedia('(max-width:900px)');
+let layoutMode = 'desktop';
+function computeLayout(){ if (!mqMobile.matches) return 'desktop'; return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait'; }
+// Reparent the single sidebar node (same controls, same photo node) into the left column on mobile; restore on desktop.
+function placeSidebar(mobile){
+  const aside = $('plantPanel'), home = $('sideHome'), adv = $('advanced');
+  const inLeft = aside.parentNode === adv.parentNode;
+  if (mobile === inLeft) return;
+  const active = document.activeElement;
+  if (mobile) adv.parentNode.insertBefore(aside, adv); else home.parentNode.insertBefore(aside, home);
+  if (active && aside.contains(active) && document.activeElement !== active) active.focus({preventScroll:true});
+}
+function revealScene(){
+  const r = $('objectWrap').getBoundingClientRect();
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const avail = layoutMode === 'portrait' ? vh * 0.58 : vh;      // area above the bottom sheet
+  if (r.top < 0 || r.bottom > avail) window.scrollBy({top: r.top - 8, left:0, behavior:'auto'});
+}
+function updateVisualViewport(){
+  const vv = window.visualViewport, root = document.documentElement.style;
+  if (!vv) return;
+  root.setProperty('--vvh', vv.height + 'px');
+  root.setProperty('--kb', Math.max(0, window.innerHeight - vv.height - vv.offsetTop) + 'px');   // on-screen keyboard offset
+}
+function evalLayout(){
+  const m = computeLayout(), changed = m !== layoutMode;
+  layoutMode = m; document.body.dataset.layout = m;
+  placeSidebar(m !== 'desktop');
+  renderEditor();
+  if (changed && state.ui.editor && m !== 'desktop') revealScene();  // explicit orientation/layout change while editing
+}
+
+function renderControls(){
+  const g = state.geom, p = state.pot;
+  for (const k of ['W','D','Ho','Hr','L','Hb','phi']) { const n = $('adv-' + k); if (document.activeElement !== n) n.value = g[k]; }
+  if (document.activeElement !== $('adv-px')) $('adv-px').value = +p.x.toFixed(3);
+  if (document.activeElement !== $('adv-py')) $('adv-py').value = +p.y.toFixed(3);
+  if (document.activeElement !== $('adv-pz')) $('adv-pz').value = p.z;
+  $('adv-px').max = g.W; $('adv-py').max = g.D;
+  $('adv-awning').checked = g.awning; $('adv-parapet').checked = g.parapet; $('adv-building').checked = g.building;
+  const e = state.everyday;
+  document.querySelectorAll('#facingRadios input').forEach(r => r.checked = +r.value === g.phi);
+  document.querySelectorAll('#gapRadios input').forEach(r => r.checked = GAPS[r.value] === g.L);
+  if (document.activeElement !== $('ownFloor')) $('ownFloor').value = e.own;
+  if (document.activeElement !== $('acrossFloors')) $('acrossFloors').value = e.across;
+  $('hasBuilding').checked = g.building;
+  $('compassArrowSvg').setAttribute('transform', `rotate(${g.phi} 18 18)`);
+  renderConds();
+}
+function renderPanel(){
+  const t = tt(), plant = PLANT_BY_ID[state.plant], min = plantMin(plant), h = derived.yearPot[state.day];
+  const v = $('verdict'); v.className = '';
+  if (!inSeason(plant, state.day)) { v.textContent = t.vOff(plant, state.lang === 'zh' ? plant.seasonZh.split('（')[0] : plant.seasonEn.split(' (')[0]); v.classList.add('off'); }
+  else if (min === null) { v.textContent = t.vUnknown(); }
+  else if (h >= min) { v.textContent = t.vOk(); v.classList.add('ok'); }
+  else { v.textContent = t.vNo(); v.classList.add('no'); }
+  $('hoursLine').textContent = min === null ? t.hoursUnknown(h) : t.hoursKnown(h, min);
+  const b = bestCell(), mb = $('moveBest');
+  mb.textContent = t.moveBest; mb.disabled = !b.brighter;
+  $('moveNote').textContent = b.bh <= 0 ? t.moveNone : (b.brighter ? t.moveCan(b.bh) : t.moveNoBetter);
+  renderPreview();
+  if ($('evidenceDialog').open) renderEvidence();
+}
+</script>
+<script>
+// ============================================================
+//  Round 2: text, photo, preview, evidence dialog, events
+// ============================================================
+function renderText(){
+  const t = tt();
+  document.documentElement.lang = state.lang === 'zh' ? 'zh-Hant' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach(n => { const v = t[n.dataset.i18n]; if (typeof v === 'string') n.textContent = v; });
+  $('langZh').setAttribute('aria-pressed', String(state.lang === 'zh')); $('langEn').setAttribute('aria-pressed', String(state.lang === 'en'));
+  const sel = $('plantSelect'); sel.textContent = '';
+  for (const p of PLANTS) { const o = document.createElement('option'); o.value = p.id; o.textContent = state.lang === 'zh' ? `${p.zh}（${p.en}）` : `${p.en} (${p.zh})`; sel.appendChild(o); }
+  sel.value = state.plant;
+  document.querySelectorAll('#facingRadios label').forEach(l => { const k = l.dataset.f; l.querySelector('span').textContent = t.facingNames[k]; l.querySelector('input').setAttribute('aria-label', `${t.facingNames[k]} ${l.dataset.deg}°`); });
+  document.querySelectorAll('#gapRadios label').forEach(l => { const k = l.dataset.g; l.querySelector('.n').textContent = t.gapNames[k]; l.querySelector('.e').textContent = t.gapEst[k]; });
+  $('modelBody').innerHTML = '<ul>' + t.model.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+  $('dataBody').innerHTML = '<p class="hint">' + t.dataNote + '</p><table><tr>' + t.dataHead.map(h => '<th>' + h + '</th>').join('') + '</tr>' +
+    PLANTS.map(p => `<tr><td>${p.zh} / ${p.en}</td><td>${t.cls[p.cls]}</td><td>${state.lang === 'zh' ? p.seasonZh : p.seasonEn}</td><td><a href="${p.src}" target="_blank" rel="noopener">${p.src}</a></td></tr>`).join('') + '</table>';
+  $('closeEvidence').setAttribute('aria-label', t.close);
+  renderPhotoText();
+}
+function buildRadios(){
+  const fr = $('facingRadios'); fr.textContent = '';
+  const order = ['NW','N','NE','W',null,'E','SW','S','SE'];
+  for (const k of order) {
+    if (k === null) { const c = document.createElement('div'); c.className = 'compassArrow'; c.setAttribute('aria-hidden', 'true');
+      c.innerHTML = '<svg viewBox="0 0 36 36"><g id="compassArrowSvg"><path d="M18 3 L26 24 L18 19 L10 24 Z" fill="#263E36"/><line x1="18" y1="19" x2="18" y2="32" stroke="#263E36" stroke-width="2"/></g></svg>'; fr.appendChild(c); continue; }
+    const d = FACINGS.find(f => f[0] === k)[1];
+    const l = document.createElement('label'); l.dataset.f = k; l.dataset.deg = d;
+    l.innerHTML = `<input type="radio" name="facing" id="facing-${k}" value="${d}"><span></span>`; fr.appendChild(l);
+  }
+  const gr = $('gapRadios'); gr.textContent = '';
+  for (const k in GAPS) { const l = document.createElement('label'); l.dataset.g = k;
+    l.innerHTML = `<input type="radio" name="gap" id="gap-${k}" value="${k}"><span><span class="n"></span><span class="e"></span></span>`; gr.appendChild(l); }
+  fr.addEventListener('change', e => { state.everyday.facing = +e.target.value; applyEveryday(); });
+  gr.addEventListener('change', e => { state.everyday.gap = e.target.value; applyEveryday(); });
+}
+
+// ---------- Photo: request only the selected plant's URL; never recreate the node ----------
+function renderPhotoText(){
+  const t = tt(), rec = PHOTOS[state.plant], plant = PLANT_BY_ID[state.plant];
+  $('plantPhoto').alt = rec ? (state.lang === 'zh' ? rec.altZh : rec.altEn) : (state.lang === 'zh' ? plant.zh : plant.en);
+  $('fallbackName').textContent = state.lang === 'zh' ? plant.zh : plant.en;
+  const st = state.ui.photoState;
+  $('fallbackNote').textContent = st === 'error' ? t.photoError : st === 'fallback' ? t.photoOff : st === 'loading' ? t.photoLoading : '';
+}
+function updatePhoto(){
+  const img = $('plantPhoto'), box = $('photoBox'), rec = PHOTOS[state.plant];
+  if (state.ui.photoPlant !== state.plant) {
+    state.ui.photoPlant = state.plant;
+    if (!rec || NO_REMOTE) { img.removeAttribute('src'); state.ui.photoState = 'fallback'; }
+    else { state.ui.photoState = 'loading'; img.dataset.plant = state.plant; img.src = rec.image_url; }
+    box.dataset.state = state.ui.photoState;
+  }
+  renderPhotoText();
+}
+function photoSettled(ok){
+  const img = $('plantPhoto');
+  if (img.dataset.plant !== state.plant) return;        // stale event from a previous plant; ignore
+  state.ui.photoState = ok ? 'ok' : 'error'; $('photoBox').dataset.state = state.ui.photoState; renderPhotoText();
+}
+
+// ---------- Best-cell preview (no state mutation) ----------
+function renderPreview(){
+  const g = $('gBestPreview');
+  if (!state.ui.preview) { g.style.display = 'none'; return; }
+  const b = bestCell();
+  if (!b.brighter) { g.style.display = 'none'; return; }
+  const c = cellCentre(b.bi % GRID, Math.floor(b.bi / GRID)), s = project(c.x, c.y);
+  ['previewRing', 'previewRing2'].forEach(id => { $(id).setAttribute('cx', s.x); $(id).setAttribute('cy', s.y); });
+  g.style.display = '';
+}
+function setPreview(on){ state.ui.preview = !!on; renderPreview(); }
+
+// ---------- Evidence dialog ----------
+function renderEvidence(){
+  const t = tt(), plant = PLANT_BY_ID[state.plant], min = plantMin(plant), h = derived.yearPot[state.day], rec = PHOTOS[state.plant];
+  const esc = x => String(x).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const link = (u, txt) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(txt || u)}</a>`;
+  const rows = [];
+  const add = (k, v) => rows.push(`<dt>${esc(t.f[k])}</dt><dd>${v}</dd>`);
+  add('plant', esc(state.lang === 'zh' ? `${plant.zh}（${plant.en}）` : `${plant.en} (${plant.zh})`));
+  add('cls', esc(t.cls[plant.cls]));
+  add('date', esc(fmtISO(state.day)));
+  add('riseSet', esc(derived.sunrise !== null && derived.sunset !== null ? `${fmtHM(derived.sunrise)} / ${fmtHM(derived.sunset)} (−0.833°)` : '—'));
+  add('pot', esc(t.potFmt(state.pot, h)));
+  add('hours', esc(h.toFixed(2) + ' h'));
+  add('min', esc(min === null ? t.unknownMin : min + ' h'));
+  add('season', esc(state.lang === 'zh' ? plant.seasonZh : plant.seasonEn) + (inSeason(plant, state.day) ? '' : (state.lang === 'zh' ? '（今天不在季節內）' : ' (today is out of season)')));
+  add('qual', esc(min === null ? t.qualUnknown : t.qualKnown(qualifyingDays(plant, derived.yearPot), seasonLength(plant))));
+  add('src', link(plant.src));
+  $('facts').innerHTML = rows.join('');
+  $('evidenceModel').innerHTML = '<p>' + esc(t.evModel) + '</p>';
+  const pr = [];
+  if (rec) {
+    pr.push(`<dt>${esc(t.f.title)}</dt><dd>${esc(rec.title)}</dd>`);
+    pr.push(`<dt>${esc(t.f.author)}</dt><dd>${esc(rec.author)}</dd>`);
+    pr.push(`<dt>${esc(t.f.source)}</dt><dd>${link(rec.source, 'Wikimedia Commons')}</dd>`);
+    pr.push(`<dt>${esc(t.f.license)}</dt><dd>${link(rec.license_url, rec.license)}</dd>`);
+  }
+  pr.push(`<dt>${esc(t.f.crop)}</dt><dd>${esc(t.cropNote)}</dd>`);
+  $('photoFacts').innerHTML = pr.join('');
+}
+function openEvidence(){
+  const dlg = $('evidenceDialog'); renderEvidence();
+  document.documentElement.classList.add('modalOpen');
+  dlg.showModal(); $('closeEvidence').focus({preventScroll:true});
+}
+function closeEvidence(){ const dlg = $('evidenceDialog'); if (dlg.open) dlg.close(); }
+
+// ---------- Events ----------
+function wire(){
+  $('langZh').addEventListener('click', () => setLang('zh')); $('langEn').addEventListener('click', () => setLang('en'));
+  $('plantSelect').addEventListener('change', e => setPlant(e.target.value));
+  const mb = $('moveBest');
+  mb.addEventListener('click', () => { moveBest(); setPreview(false); });
+  mb.addEventListener('pointerenter', () => setPreview(true)); mb.addEventListener('pointerleave', () => setPreview(false));
+  mb.addEventListener('focus', () => setPreview(true)); mb.addEventListener('blur', () => setPreview(false));
+  $('dateRange').addEventListener('input', e => setDay(e.target.value));
+  document.querySelectorAll('.shortcuts button').forEach(b => b.addEventListener('click', () => setDay(+b.dataset.day)));
+  for (const k of ['W','D','Ho','Hr','L','Hb','phi']) $('adv-' + k).addEventListener('change', e => setGeomField(k, e.target.value));
+  for (const k of ['x','y','z']) $('adv-p' + k).addEventListener('change', e => setPotField(k, e.target.value));
+  for (const k of ['awning','parapet','building']) $('adv-' + k).addEventListener('change', e => setGeomField(k, e.target.checked));
+  const floorsChanged = () => { const o = Math.max(1, Math.min(30, Math.round(+$('ownFloor').value) || 1)), a = Math.max(1, Math.min(30, Math.round(+$('acrossFloors').value) || 1));
+    state.everyday.own = o; state.everyday.across = a; applyEveryday(); };
+  $('ownFloor').addEventListener('change', floorsChanged); $('acrossFloors').addEventListener('change', floorsChanged);
+  $('hasBuilding').addEventListener('change', e => { state.everyday.building = e.target.checked; applyEveryday(); });
+  // condition summary buttons + inline editor
+  $('conditionFacing').addEventListener('click', () => toggleEditor('facing'));
+  $('conditionFloors').addEventListener('click', () => toggleEditor('floors'));
+  $('conditionGap').addEventListener('click', () => toggleEditor('gap'));
+  $('closeEditor').addEventListener('click', closeEditor);
+  const escScope = e => { if (e.key === 'Escape' && state.ui.editor) { e.preventDefault(); e.stopPropagation(); closeEditor(); } };
+  $('condGroup').addEventListener('keydown', escScope); $('conditionEditor').addEventListener('keydown', escScope);
+  // layout mode: breakpoint, resize/orientation (layout viewport), visual viewport for the keyboard
+  mqMobile.addEventListener('change', evalLayout);
+  window.addEventListener('resize', evalLayout);
+  window.addEventListener('orientationchange', evalLayout);
+  if (window.visualViewport) { window.visualViewport.addEventListener('resize', updateVisualViewport); window.visualViewport.addEventListener('scroll', updateVisualViewport); updateVisualViewport(); }
+  // photo
+  const img = $('plantPhoto'); img.addEventListener('load', () => photoSettled(true)); img.addEventListener('error', () => photoSettled(false));
+  // evidence dialog
+  const dlg = $('evidenceDialog');
+  $('openEvidence').addEventListener('click', openEvidence);
+  $('closeEvidence').addEventListener('click', closeEvidence);
+  dlg.addEventListener('click', e => { if (e.target !== dlg) return; const r = dlg.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeEvidence(); });
+  dlg.addEventListener('cancel', e => { e.preventDefault(); closeEvidence(); });
+  dlg.addEventListener('close', () => { document.documentElement.classList.remove('modalOpen'); $('openEvidence').focus({preventScroll:true}); });
+  dlg.addEventListener('wheel', e => { if (!e.target.closest('.evidence-body')) e.preventDefault(); }, {passive:false});
+  dlg.addEventListener('touchmove', e => { if (!e.target.closest('.evidence-body')) e.preventDefault(); }, {passive:false});
+
+  // Date handle drag (preserves grab offset); chart click/drag also sets the day.
+  const scene = $('scene'), gh = $('gHandle');
+  let dateDrag = null, potDrag = false;
+  const startDate = (e, offset) => { potDrag = false; dateDrag = {offset}; scene.setPointerCapture(e.pointerId); gh.classList.add('dragging'); e.preventDefault(); };
+  gh.addEventListener('pointerdown', e => { const p = svgPoint(e); startDate(e, p.x - dayToX(state.day)); });
+  $('chartHit').addEventListener('pointerdown', e => { const p = svgPoint(e); setDay(xToDay(p.x)); startDate(e, 0); });
+  const potFrom = e => { const p = svgPoint(e); if (p.y < LY.farY - 2) return; const q = unproject(p.x, p.y); setPotXY(q.x, q.y); };
+  const startPot = e => { if (dateDrag) return; potDrag = true; scene.setPointerCapture(e.pointerId); e.preventDefault(); potFrom(e); };
+  $('gFloor').addEventListener('pointerdown', startPot);
+  $('potHit').addEventListener('pointerdown', startPot);
+  scene.addEventListener('pointermove', e => { if (dateDrag) { const p = svgPoint(e); setDay(xToDay(p.x - dateDrag.offset)); } else if (potDrag) potFrom(e); });
+  const stop = () => { dateDrag = null; potDrag = false; gh.classList.remove('dragging'); };
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => scene.addEventListener(ev, stop));
+  // Keyboard on the wrapper: arrows move the pot one cell in SCREEN directions (up = toward railing = smaller y).
+  $('objectWrap').addEventListener('keydown', e => {
+    const c = currentCell(); let di = 0, dj = 0;
+    if (e.key === 'ArrowUp') dj = -1; else if (e.key === 'ArrowDown') dj = 1; else if (e.key === 'ArrowLeft') di = -1; else if (e.key === 'ArrowRight') di = 1; else return;
+    e.preventDefault(); setPotCell(c.i + di, c.j + dj);
+  });
+}
+function init(){
+  buildRadios(); wire();
+  recomputeYear(); recomputeFloor(); recomputeDay(); runSelfCheck(); renderAll(); updatePhoto();
+  evalLayout();
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
