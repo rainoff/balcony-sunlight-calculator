@@ -20,6 +20,10 @@ button,input,select{font:inherit;color:inherit}
 .masthead .brand{font-weight:600;letter-spacing:.04em}
 .langs button{background:none;border:1px solid var(--rule);border-radius:999px;padding:1px 10px;margin-left:4px;cursor:pointer;font-size:12px}
 .langs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.colophon{display:flex;justify-content:flex-end;padding:0 16px env(safe-area-inset-bottom,0px);border-top:1px solid var(--rule)}
+.colophon a{display:inline-flex;align-items:center;gap:6px;min-height:44px;font-size:13px;color:var(--muted);text-decoration:none}
+.colophon a:hover{color:var(--leaf);text-decoration:underline}
+.colophon a:focus-visible{outline:3px solid rgba(57,119,93,.5);outline-offset:2px;border-radius:6px}
 .page{padding:8px 16px 32px;display:grid;grid-template-columns:3fr minmax(280px,1fr);gap:28px;align-items:start}
 h1{font-size:30px;line-height:1.2;margin:4px 0 2px;font-weight:600}
 .sub{margin:0 0 8px;color:var(--muted);font-size:14px}
@@ -437,6 +441,14 @@ body[data-layout="portrait"] .obInner{max-height:80vh;max-height:80dvh}
   </aside>
   <div id="sideHome" hidden></div>
 </main>
+<footer class="colophon">
+  <a href="https://github.com/rainoff/balcony-sunlight-calculator" target="_blank" rel="noopener">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+    </svg>
+    <span data-i18n="source">原始碼</span>
+  </a>
+</footer>
 </div>
 <dialog id="onboarding" aria-labelledby="obTitle">
   <div class="obInner">
@@ -732,7 +744,7 @@ function bestCell(){
 // ============================================================
 const T = {
 zh:{
-  brand:'陽台日照計算器', title:'把一年的陽光，放進陽台裡。',
+  brand:'陽台日照計算器', title:'把一年的陽光，放進陽台裡。', source:'原始碼',
   subtitle:'往前看一整年的陽光，往下看選定日期的地板熱度，拖一盆去比一比。',
   sceneTitle:'陽台日照水族箱：後方為全年直射時數，下方為當日地板分布',
   wrapHelp:'點或拖地板任一格移動花盆；方向鍵以格為單位移動（上＝靠欄杆）。拖動上方日期把手改變日期。',
@@ -760,7 +772,7 @@ zh:{
   ]
 },
 en:{
-  brand:'Balcony sunlight calculator', title:'A year of sunlight, inside your balcony.',
+  brand:'Balcony sunlight calculator', title:'A year of sunlight, inside your balcony.', source:'Source code',
   subtitle:'Look forward at a year of sun, down at the chosen day\'s floor heat, and drag a pot to compare spots.',
   sceneTitle:'Balcony sunlight aquarium: yearly direct-sun hours behind, the selected day\'s floor map below',
   wrapHelp:'Click or drag any floor cell to move the pot; arrow keys move one cell (up = toward the railing). Drag the date handle above to change the day.',
